@@ -55,5 +55,14 @@ namespace Restaurante.Data.Repositories
             }
             return document;
         }
+        public RestaurantSchema ObterPorNome(string nome)
+        {
+            var document = _restaurantes.AsQueryable().FirstOrDefault(_ => _.Nome == nome);
+            if (document == null)
+            {
+                return null;
+            }
+            return document;
+        }
     }
 }

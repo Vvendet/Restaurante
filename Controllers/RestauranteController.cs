@@ -69,13 +69,24 @@ namespace Restaurante.Controllers
         }
 
         [HttpGet("restaurante/{id}")]
-        public ActionResult ObterRestaurante(string id)
+        public ActionResult ObterRestauranteI(string id)
         {
             var restaurante = _restauranteRepository.ObterPorId(id);
             if (restaurante == null)
                 return NotFound();
             return Ok(
                 new {data = restaurante });
+
+        }
+
+        [HttpGet("restaurante/byname/{nome}")]
+        public ActionResult ObterRestauranteN(string nome)
+        {
+            var restaurante = _restauranteRepository.ObterPorNome(nome);
+            if (restaurante == null)
+                return NotFound();
+            return Ok(
+                new { data = restaurante });
 
         }
     };
