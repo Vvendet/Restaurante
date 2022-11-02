@@ -18,17 +18,17 @@ namespace Restaurante.Controllers
         }
         
         [HttpPost("restaurante")]
-        public ActionResult IncluirRestaurante([FromBody] RestauranteInclusao restauranteInclusao)
+        public ActionResult IncluirRestaurante([FromQuery] string nome, int ccozinha, string logradouro, string numero, string cidade, string uf, string cep)
         {
-            var cozinha = ECozinhaHelper.ConverterDeInteiro(restauranteInclusao.Cozinha);
+            var cozinha = ECozinhaHelper.ConverterDeInteiro(ccozinha);
 
-            var restaurante = new Restaurant(restauranteInclusao.Id, restauranteInclusao.Nome, cozinha);
+            var restaurante = new Restaurant(nome, cozinha);
             var endereco = new Endereco(
-                restauranteInclusao.Logradouro,
-                restauranteInclusao.Numero,
-                restauranteInclusao.Cidade,
-                restauranteInclusao.UF,
-                restauranteInclusao.Cep);
+                logradouro,
+                numero,
+                cidade,
+                uf,
+                cep);
             restaurante.AtribuirEndereco(endereco);
 
             if (!restaurante.Validar())

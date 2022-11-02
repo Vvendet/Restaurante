@@ -7,9 +7,8 @@ namespace Restaurante.Domain.Entities
 {
     public class Restaurant : AbstractValidator<Restaurant>
     {
-        public Restaurant(string id, string nome, ECozinha cozinha)
+        public Restaurant(string nome, ECozinha cozinha)
         {
-            Id = id;
             Nome = nome;
             Cozinha = cozinha;
         }
