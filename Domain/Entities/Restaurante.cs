@@ -1,9 +1,7 @@
-﻿using CursoMongo.Api.Domain.Enums;
-using CursoMongo.Api.Domain.ValueObjects;
+﻿using Restaurante.Domain.Enums;
+using Restaurante.Domain.ValueObjects;
 using FluentValidation;
 using FluentValidation.Results;
-using Restaurante.Domain.Enums;
-using Restaurante.Domain.ValueObjects;
 
 namespace CursoMongo.Api.Domain.Entities
 {
