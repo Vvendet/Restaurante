@@ -13,10 +13,10 @@ namespace Restaurante.Domain.Entities
             Cozinha = cozinha;
         }
 
-        public string Id { get; private set; }
-        public string Nome { get; private set; }
-        public ECozinha Cozinha { get; private set; }
-        public Endereco Endereco { get; private set; }
+        public string Id { get; set; }
+        public string Nome { get; set; }
+        public ECozinha Cozinha { get; set; }
+        public Endereco Endereco { get; set; }
 
         public ValidationResult ValidationResult { get; set; }
 

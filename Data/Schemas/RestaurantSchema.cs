@@ -1,6 +1,8 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using Restaurante.Domain.Entities;
 using Restaurante.Domain.Enums;
+using Restaurante.Domain.ValueObjects;
 
 namespace Restaurante.Data.Schemas
 {
@@ -11,5 +13,16 @@ namespace Restaurante.Data.Schemas
         public string Nome { get; set; }
         public ECozinha Cozinha { get; set; }
         public EnderecoSchema Endereco { get; set; }
+    }
+    public static class RestaurantSchemaExtensao
+    {
+            public static Restaurant ConverterParaDomain(this RestaurantSchema document)
+        {
+            var restaurante = new Restaurant(document.Nome, document.Cozinha);
+            var endereco = new Endereco(document.Endereco.Logradouro, document.Endereco.Numero, document.Endereco.Cidade, document.Endereco.UF, document.Endereco.Cep);
+            restaurante.AtribuirEndereco(endereco);
+            restaurante.Id = document.Id;
+            return restaurante;
+        }
     }
 }

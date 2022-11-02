@@ -4,6 +4,7 @@ using Restaurante.Domain.Enums;
 using Restaurante.Domain.Entities;
 using Restaurante.Domain.ValueObjects;
 using Restaurante.Data.Repositories;
+using Restaurante.Controllers.Outputs;
 
 namespace Restaurante.Controllers
 {
@@ -46,7 +47,37 @@ namespace Restaurante.Controllers
                     data = "Restaurante inserido com sucesso"
                 });
         }
-        
+
+        [HttpGet("restaurante/todos")]
+        public async Task<ActionResult> ObterRestaurantes()
+        {
+            var restaurantes = await _restauranteRepository.ObterTodos();
+
+            var listagem = restaurantes.Select(_ => new RestauranteListagem
+            {
+                Id = _.Id,
+                Nome = _.Nome,
+                Cozinha = (int)_.Cozinha,
+                Cidade = _.Endereco.Cidade,
+            });
+            return Ok(
+                new
+                {
+                    data = listagem
+                }
+            );
+        }
+
+        [HttpGet("restaurante/{id}")]
+        public ActionResult ObterRestaurante(string id)
+        {
+            var restaurante = _restauranteRepository.ObterPorId(id);
+            if (restaurante == null)
+                return NotFound();
+            return Ok(
+                new {data = restaurante });
+
+        }
     };
 
 }
