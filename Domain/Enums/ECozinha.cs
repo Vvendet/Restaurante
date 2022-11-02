@@ -8,4 +8,16 @@
         Japonesa = 4,
         FastFood = 5
     }
+
+    public static class ECozinhaHelper
+    {
+        public static ECozinha ConverterDeInteiro(int valor)
+        {
+            if (Enum.TryParse(valor.ToString(), out ECozinha cozinha))
+            {
+                return cozinha;
+            }
+            throw new ArgumentException("cozinha");
+        }
+    }
 }

@@ -3,11 +3,11 @@ using Restaurante.Domain.ValueObjects;
 using FluentValidation;
 using FluentValidation.Results;
 
-namespace CursoMongo.Api.Domain.Entities
+namespace Restaurante.Domain.Entities
 {
-    public class Restaurante : AbstractValidator<Restaurante>
+    public class Restaurant : AbstractValidator<Restaurant>
     {
-        public Restaurante(string id, string nome, ECozinha cozinha)
+        public Restaurant(string id, string nome, ECozinha cozinha)
         {
             Id = id;
             Nome = nome;
