@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Restaurante.Domain.Enums;
 using Restaurante.Domain.Entities;
 using Restaurante.Domain.ValueObjects;
+using Restaurante.Data.Repositories;
 
 namespace Restaurante.Controllers
 {
@@ -10,13 +11,18 @@ namespace Restaurante.Controllers
     [Route("[controller]")]
     public class RestauranteController : ControllerBase
     {
+        private readonly RestauranteRepository _restauranteRepository;
+        public RestauranteController(RestauranteRepository restauranteRepository)
+        {
+            _restauranteRepository = restauranteRepository;
+        }
         
         [HttpPost("restaurante")]
         public ActionResult IncluirRestaurante([FromBody] RestauranteInclusao restauranteInclusao)
         {
             var cozinha = ECozinhaHelper.ConverterDeInteiro(restauranteInclusao.Cozinha);
 
-            var restaurante = new Restaurant(restauranteInclusao.Nome, cozinha);
+            var restaurante = new Restaurant(restauranteInclusao.Id, restauranteInclusao.Nome, cozinha);
             var endereco = new Endereco(
                 restauranteInclusao.Logradouro,
                 restauranteInclusao.Numero,
