@@ -13,6 +13,10 @@ namespace Restaurante.Data.Schemas
         public string Nome { get; set; }
         public ECozinha Cozinha { get; set; }
         public EnderecoSchema Endereco { get; set; }
+        public void AtribuirEndereco(EnderecoSchema endereco)
+        {
+            Endereco = endereco;
+        }
     }
     public static class RestaurantSchemaExtensao
     {

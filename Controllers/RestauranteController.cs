@@ -5,6 +5,7 @@ using Restaurante.Domain.Entities;
 using Restaurante.Domain.ValueObjects;
 using Restaurante.Data.Repositories;
 using Restaurante.Controllers.Outputs;
+using Restaurante.Data.Schemas;
 
 namespace Restaurante.Controllers
 {
@@ -68,7 +69,7 @@ namespace Restaurante.Controllers
             );
         }
 
-        [HttpGet("restaurante/{id}")]
+        [HttpGet("restaurante/byid/{id}")]
         public ActionResult ObterRestauranteI(string id)
         {
             var restaurante = _restauranteRepository.ObterPorId(id);
@@ -89,6 +90,62 @@ namespace Restaurante.Controllers
                 new { data = restaurante });
 
         }
+        [HttpPut("restaurante")]
+        public ActionResult AlterarRestauranteCompleto([FromQuery] string id, string nome, int ccozinha, string logradouro, string numero, string cidade, string uf, string cep)
+        {
+            var restaurante = _restauranteRepository.ObterPorId(id);
+            
+            if (restaurante == null)
+            {
+                return NotFound();
+            }
+            var cozinha = ECozinhaHelper.ConverterDeInteiro(ccozinha);
+            var restaurante2 = new Restaurant(nome, cozinha);
+            var endereco = new Endereco(logradouro, numero, cidade, uf, cep);
+            restaurante2.Id = id;
+            restaurante2.AtribuirEndereco(endereco);
+            if (!restaurante2.Validar())
+            {
+                return BadRequest(
+                    new
+                    {
+                        errors = restaurante2.ValidationResult.Errors.Select(_ => _.ErrorMessage)
+                    });
+            }
+
+            var document = new RestaurantSchema()
+            {
+                Id = restaurante2.Id,
+                Nome = restaurante2.Nome,
+                Cozinha = restaurante2.Cozinha,
+
+                Endereco = new EnderecoSchema()
+                {
+                    Logradouro = restaurante2.Endereco.Logradouro,
+                    Numero = restaurante2.Endereco.Numero,
+                    Cidade = restaurante2.Endereco.Cidade,
+                    Cep = restaurante2.Endereco.Cep,
+                    UF = restaurante2.Endereco.UF
+                }
+            };
+            if (!_restauranteRepository.AlterarCompleto(document))
+            {
+                return BadRequest(new
+                {
+                    errors = "Nenhum documento foi alterado"
+                });
+
+            }
+            return Ok(new
+            {
+                data = "Restaurante alterado com sucesso"
+            });
+        }
+
+       
+    
     };
+
+        
 
 }

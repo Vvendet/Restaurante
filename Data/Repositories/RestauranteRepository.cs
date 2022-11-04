@@ -1,6 +1,7 @@
 ﻿using MongoDB.Driver;
 using Restaurante.Data.Schemas;
 using Restaurante.Domain.Entities;
+using Restaurante.Domain.Enums;
 using Restaurante.Domain.ValueObjects;
 using System.Linq;
 namespace Restaurante.Data.Repositories
@@ -63,6 +64,18 @@ namespace Restaurante.Data.Repositories
                 return null;
             }
             return document;
+        }
+
+        public bool AlterarCompleto(RestaurantSchema restaurante)
+        {
+            var resultado = _restaurantes.ReplaceOne(_ => _.Id == restaurante.Id, restaurante);
+            return resultado.ModifiedCount > 0; 
+        }
+        public bool AlterarCozinha(string id, ECozinha cozinha)
+        {
+            var atualizacao = Builders<RestaurantSchema>.Update.Set(_ => _.Cozinha, cozinha);
+            var resultado = _restaurantes.UpdateOne(_ => _.Id == id, atualizacao);
+            return resultado.ModifiedCount > 0;
         }
     }
 }
