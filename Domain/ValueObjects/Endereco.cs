@@ -13,11 +13,11 @@ namespace Restaurante.Domain.ValueObjects
             UF = uf;
             Cep = cep;
         }
-        public string Logradouro { get; private set; }
-        public string Numero { get; private set; }
-        public string Cidade { get; private set; }
-        public string UF { get; private set; }
-        public string Cep { get; private set; }
+        public string Logradouro { get;  set; }
+        public string Numero { get;  set; }
+        public string Cidade { get;  set; }
+        public string UF { get;  set; }
+        public string Cep { get;  set; }
         public ValidationResult ValidationResult { get; set; }
 
 

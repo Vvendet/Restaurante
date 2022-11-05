@@ -142,8 +142,82 @@ namespace Restaurante.Controllers
             });
         }
 
-       
-    
+        [HttpPatch("restaurante/byid/avaliar")]
+        public ActionResult AvaliarRestaurante([FromQuery] string id, int estrelas, string comentario)
+        {
+            var restaurante = _restauranteRepository.ObterPorId(id);
+            if (restaurante == null)
+            {
+                return NotFound();
+            }
+
+            var avaliacao = new Avaliacao(estrelas, comentario);
+
+            if (!avaliacao.Validar())
+            {
+                return BadRequest(new
+                {
+                    errors = avaliacao.ValidationResult.Errors.Select(_ => _.ErrorMessage)
+                });
+            }
+
+            _restauranteRepository.Avaliar(id, avaliacao);
+            return Ok(new
+            {
+                data = "restaurante avaliado com sucesso"
+            });
+            
+        }
+
+        [HttpGet("restaurante/avaliacoes")]
+        public async Task<ActionResult> ObterAvaliacoes()
+        {
+            var avaliacoes = await _restauranteRepository.ObterAvaliacoesw();
+
+            var listagem = avaliacoes.Select(_ => new AvaliacaoListagem
+            {
+                Estrelas = _.Estrelas,
+                Comentario = _.Comentario
+            });
+            return Ok(
+                new
+                {
+                    data = listagem
+                }
+            );
+        }
+
+        [HttpGet("restaurante/top3")]
+        public async Task<ActionResult> ObterTop3Restaurantes()
+        {
+            var top3 = await _restauranteRepository.ObterTop3();
+            var listagem = top3.Select(_ => new RestauranteTop3
+            {
+                Id = _.Key.Id,
+                Nome = _.Key.Nome,
+                Cozinha = _.Key.Cozinha,
+                Cidade = _.Key.Endereco.Cidade,
+                Estrelas = _.Value.ToString()
+
+            });
+
+            return Ok(new {data = listagem});
+
+        }
+
+        [HttpDelete("restaurante/delete/{id}")]
+        public ActionResult Remover(string id)
+        {
+            var restaurante = _restauranteRepository.ObterPorId(id);
+            if (restaurante == null)
+            {
+                return NotFound();
+            }
+            (var totalAvaliacoesRemovidas, var totalRestauranteRemovido ) = _restauranteRepository.Remover(id);
+
+            return Ok(new { data = $"Avaliações removidas: {totalAvaliacoesRemovidas}; Restaurantes removidos: {totalRestauranteRemovido}" });
+        }
+
     };
 
         

@@ -11,6 +11,7 @@ namespace Restaurante.Domain.Entities
         {
             Nome = nome;
             Cozinha = cozinha;
+            Avaliacoes = new List<Avaliacao>();
         }
 
         public string Id { get; set; }
@@ -19,6 +20,7 @@ namespace Restaurante.Domain.Entities
         public Endereco Endereco { get; set; }
 
         public ValidationResult ValidationResult { get; set; }
+        public List<Avaliacao> Avaliacoes { get; set; }
 
         public void AtribuirEndereco(Endereco endereco)
         {
@@ -49,6 +51,10 @@ namespace Restaurante.Domain.Entities
 
             foreach (var erro in Endereco.ValidationResult.Errors)
                 ValidationResult.Errors.Add(erro);
+        }
+        public void InserirAvaliacao(Avaliacao avaliacao)
+        {
+            Avaliacoes.Add(avaliacao);
         }
     }
 }
